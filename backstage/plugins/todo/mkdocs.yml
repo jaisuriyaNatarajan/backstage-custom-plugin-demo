@@ -1,0 +1,10 @@
+site_name: Todo Frontend Plugin Docs
+nav:
+  - Overview: index.md
+  - Usage: usage.md
+plugins:
+  - techdocs-core
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true

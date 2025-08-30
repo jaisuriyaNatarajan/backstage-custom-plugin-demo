@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: todo-frontend
+  title: Todo Frontend Plugin
+  description: A pure-frontend Todo page with static data
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  owner: you
+  lifecycle: experimental
