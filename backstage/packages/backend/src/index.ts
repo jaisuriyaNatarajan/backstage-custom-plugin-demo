@@ -1,8 +1,18 @@
 import { createBackend } from '@backstage/backend-defaults';
+import { log } from './logger';
+import { winstonLoggerServiceFactory } from './logger/serviceFactory';
 
 const backend = createBackend();
-console.log('🟥 backend index.ts booting');
 
+// Replace default logger with our Winston-backed service
+backend.add(winstonLoggerServiceFactory);
+
+// (optional) Your own startup/business logs
+console.log('🟥 Backend booting (raw console)');
+log.info('Backstage backend starting', { service: 'backstage-backend' });
+log.info('Scheduled job executed', { job: 'sync:entities', count: 42 });
+
+// Register plugins
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
 
@@ -24,7 +34,7 @@ backend.add(
 );
 backend.add(import('@backstage/plugin-catalog-backend-module-logs'));
 
-// 👇 Add this: register our custom catalog module
+// Your custom module
 backend.add(import('./modules/catalog-module-jsonplaceholder'));
 
 backend.add(import('@backstage/plugin-permission-backend'));
@@ -41,4 +51,5 @@ backend.add(import('@backstage/plugin-notifications-backend'));
 backend.add(import('@backstage/plugin-signals-backend'));
 
 backend.add(import('@internal/plugin-todo-backend'));
+
 backend.start();
