@@ -39,12 +39,15 @@ import { NotificationsPage } from '@backstage/plugin-notifications';
 import { SignalsDisplay } from '@backstage/plugin-signals';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
 import { TodoPage } from '@internal/plugin-todo';
+import { PlayPageExtension } from './plugins/playPlugin';
+import { playRouteRef } from './routes';
 
 const app = createApp({
   apis,
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
-      createComponent: scaffolderPlugin.routes.root,
+      // createComponent: scaffolderPlugin.routes.root,
+      createComponent: playRouteRef,
       viewTechDoc: techdocsPlugin.routes.docRoot,
       createFromTemplate: scaffolderPlugin.routes.selectedTemplate,
     });
@@ -87,6 +90,7 @@ const routes = (
       {entityPage}
     </Route>
     <Route path="/docs" element={<TechDocsIndexPage />} />
+    <Route path="/play" element={<PlayPageExtension />} />
     <Route
       path="/docs/:namespace/:kind/:name/*"
       element={<TechDocsReaderPage />}
