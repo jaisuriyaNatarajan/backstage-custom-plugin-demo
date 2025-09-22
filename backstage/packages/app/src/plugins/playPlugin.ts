@@ -1,4 +1,3 @@
-// src/plugins/playPlugin.ts
 import {
   createPlugin,
   createRoutableExtension,
