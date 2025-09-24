@@ -29,6 +29,7 @@ import { MyGroupsSidebarItem } from '@backstage/plugin-org';
 import GroupIcon from '@material-ui/icons/People';
 import { NotificationsSidebarItem } from '@backstage/plugin-notifications';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import ApiIcon from '@mui/icons-material/Api';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -77,6 +78,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
+        <SidebarItem icon={ApiIcon} to="api-explorer" text="Swagger" />
         <SidebarItem icon={FormatListBulletedIcon} to="todo" text="Todo" />
         {/* End global nav */}
         <SidebarDivider />

@@ -13,27 +13,44 @@ export const SwaggerApiDocsPage = () => {
   const discoveryApi = useApi(discoveryApiRef);
   const fetchApi = useApi(fetchApiRef);
 
-  const [spec, setSpec] = React.useState<any>(null);
+  const [specs, setSpecs] = React.useState<Record<string, any>>({});
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  const loadSpec = async () => {
+  const pluginIds = ['catalog', 'scaffolder', 'identity'];
+
+  const loadSpecs = async () => {
     setLoading(true);
     setError(null);
-    try {
-      const baseUrl = await discoveryApi.getBaseUrl('catalog');
-      const resp = await fetchApi.fetch(`${baseUrl}/openapi.json`);
-      if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
-      setSpec(await resp.json());
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
+
+    const loadedSpecs: Record<string, any> = {};
+
+    for (const pluginId of pluginIds) {
+      try {
+        const baseUrl = await discoveryApi.getBaseUrl(pluginId);
+        const resp = await fetchApi.fetch(`${baseUrl}/openapi.json`);
+
+        if (!resp.ok) {
+          console.warn(
+            `Skipping ${pluginId}: ${resp.status} ${resp.statusText}`,
+          );
+          continue;
+        }
+
+        const spec = await resp.json();
+        loadedSpecs[pluginId] = spec;
+      } catch (e) {
+        console.warn(`Error loading ${pluginId}:`, e);
+        continue;
+      }
     }
+
+    setSpecs(loadedSpecs);
+    setLoading(false);
   };
 
   React.useEffect(() => {
-    loadSpec();
+    loadSpecs();
   }, []);
 
   return (
@@ -42,13 +59,18 @@ export const SwaggerApiDocsPage = () => {
       <Content>
         {loading && <Progress />}
         {error && <div style={{ color: 'red' }}>Error: {error}</div>}
-        {spec && (
-          <SwaggerUI
-            spec={spec}
-            docExpansion="list"
-            defaultModelsExpandDepth={1}
-          />
-        )}
+        {Object.keys(specs).length > 0
+          ? Object.entries(specs).map(([pluginId, spec]) => (
+              <div key={pluginId} style={{ marginBottom: '2rem' }}>
+                <h2>{pluginId.toUpperCase()} API</h2>
+                <SwaggerUI
+                  spec={spec}
+                  docExpansion="list"
+                  defaultModelsExpandDepth={1}
+                />
+              </div>
+            ))
+          : !loading && <div>No API specs available.</div>}
       </Content>
     </Page>
   );
