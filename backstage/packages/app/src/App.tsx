@@ -42,6 +42,7 @@ import { TodoPage } from '@internal/plugin-todo';
 import { PlayPageExtension } from './plugins/playPlugin';
 import { playRouteRef } from './routes';
 import VmOrderCreatePage from './components/scaffolder/VmOrderCreatePage';
+import SwaggerApiDocsPage from './components/swagger/SwaggerApiDocsPage';
 
 const app = createApp({
   apis,
@@ -84,6 +85,7 @@ const routes = (
   <FlatRoutes>
     <Route path="/" element={<Navigate to="catalog" />} />
     <Route path="/catalog" element={<CatalogIndexPage />} />
+    <Route path="/api-explorer" element={<SwaggerApiDocsPage />} />
     <Route
       path="/catalog/:namespace/:kind/:name"
       element={<CatalogEntityPage />}

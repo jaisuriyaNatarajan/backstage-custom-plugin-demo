@@ -15,6 +15,9 @@ backend:
   auth:
     keys:
       - secret: ${BACKEND_SECRET}
+  csp:
+    # allow swagger-ui
+    connect-src: ["'self'", 'http:']
     # externalAccess:
     #   - type: static
     #     options:
