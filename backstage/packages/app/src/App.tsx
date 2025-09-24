@@ -41,6 +41,7 @@ import { githubAuthApiRef } from '@backstage/core-plugin-api';
 import { TodoPage } from '@internal/plugin-todo';
 import { PlayPageExtension } from './plugins/playPlugin';
 import { playRouteRef } from './routes';
+import VmOrderCreatePage from './components/scaffolder/VmOrderCreatePage';
 
 const app = createApp({
   apis,
@@ -100,6 +101,7 @@ const routes = (
       </TechDocsAddons>
     </Route>
     <Route path="/create" element={<ScaffolderPage />} />
+    <Route path="/create/vm-order" element={<VmOrderCreatePage />} />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
       path="/catalog-import"

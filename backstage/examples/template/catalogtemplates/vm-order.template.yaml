@@ -1,0 +1,125 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: vm-order
+  title: Order Reserve VM QA
+  description: Reserve VM for QA workload
+  tags: ['vm', 'qa', 'infra']
+spec:
+  owner: group:default/it
+  type: service
+
+  parameters:
+    - title: Order Reserve VM QA
+      description: The resource allocated by this order will start to be billed once provisioned. To prevent unnecessary cost, the resources should be destroyed once no longer in use.
+      required:
+        - group
+        - environment
+        - osBuild
+        - patchLevel
+        - hostname
+        - quantity
+        - qscPrimary
+        - osVersion
+        - businessProduct
+        - businessProject
+        - nodeSize
+      properties:
+        group:
+          title: Group
+          type: string
+          enum: ['IT', 'Engineering', 'Finance', 'Marketing']
+          default: 'IT'
+        environment:
+          title: Environment
+          type: string
+          enum: ['{POD1} itCloud', '{POD2} itCloud', 'On-Prem']
+          default: '{POD1} itCloud'
+        osBuild:
+          title: OS Build
+          type: string
+          enum: ['QSC-P-CentOS56-6-21P1-v2', 'QSC-P-RHEL73-2021-v1']
+          default: 'QSC-P-CentOS56-6-21P1-v2'
+        patchLevel:
+          title: Patch Level
+          type: string
+          enum: ['22P1', '23P1', '24P1']
+          default: '22P1'
+        accessRestriction:
+          title: Access restriction required
+          type: boolean
+          default: false
+
+        hostname:
+          title: Hostname
+          type: string
+          pattern: '^[a-z0-9-]{3,30}$'
+          description: lowercase letters, digits and dashes
+        quantity:
+          title: Quantity
+          type: integer
+          minimum: 1
+          default: 1
+
+        qscPrimary:
+          title: QSC
+          type: string
+          enum: ['QSC-P', 'QSC-QA', 'QSC-DEV']
+          default: 'QSC-P'
+        osVersion:
+          title: OS Version
+          type: string
+          enum: ['RHEL7.3', 'RHEL8.6', 'CentOS7']
+          default: 'RHEL7.3'
+
+        businessProduct:
+          title: Business Product
+          type: string
+        businessProject:
+          title: Business Project
+          type: string
+        expirationDate:
+          title: Expiration Date
+          type: string
+          format: date
+
+        nodeSize:
+          title: Node Size
+          type: string
+          enum: ['QSC', 'S', 'M', 'L']
+          default: 'QSC'
+        qscSecondary:
+          title: QSC
+          type: string
+          enum: ['QSC-P', 'QSC-QA', 'QSC-DEV']
+          default: 'QSC-P'
+
+      ui:uiSchema:
+        'ui:order':
+          [
+            "group","environment","hostname","quantity",
+            "osBuild","qscPrimary","osVersion",
+            "patchLevel","accessRestriction",
+            "businessProduct","businessProject","expirationDate",
+            "nodeSize","qscSecondary"
+          ]
+        group: { 'ui:widget': 'select' }
+        environment: { 'ui:widget': 'select' }
+        osBuild: { 'ui:widget': 'select' }
+        patchLevel: { 'ui:widget': 'select' }
+        accessRestriction: { 'ui:widget': 'checkbox' }
+        quantity: { 'ui:widget': 'updown' }
+        expirationDate: { 'ui:options': { inputType: 'date' } }
+
+  steps:
+    - id: validate
+      name: Validate request
+      action: debug:log
+      input:
+        message: 'Validating VM order…'
+
+    - id: done
+      name: Submit
+      action: debug:log
+      input:
+        message: 'Order submitted'

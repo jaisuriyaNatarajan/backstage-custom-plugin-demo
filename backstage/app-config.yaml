@@ -56,20 +56,24 @@ catalog:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location] 
+    - allow: [Component, System, API, Resource, Location]
   locations:
     - type: file
       target: ../../examples/entities.yaml
-
     - type: file
       target: ../../examples/template/template.yaml
       rules:
         - allow: [Template]
 
     - type: file
+      target: ../../examples/template/catalogtemplates/vm-order.template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
       target: ../../examples/org.yaml
       rules:
-        - allow: [User, Group] 
+        - allow: [User, Group]
 
     - type: file
       target: ../../plugins/todo/catalog-info.yaml
